@@ -1,0 +1,291 @@
+﻿Extracted web page content in markdown format:
+[Start contents for https://www.questpdf.com/]
+Skip to content
+
+![Image](/logo.webp)
+QuestPDF
+
+Search⌘CtrlK Main Navigation [Documentation](https://www.questpdf.com/quick-start.html)[
+Features](https://www.questpdf.com/features-overview.html)[Pricing](https://www.questpdf.com/pricing.html)[
+GitHub](https://github.com/QuestPDF/QuestPDF)[NuGet](https://www.nuget.org/packages/QuestPDF)[
+Contact](https://www.questpdf.com/contact.html)
+
+Appearance
+
+Are you an LLM? View /llms.txt for optimized Markdown documentation, or
+/llms-full.txt for full documentation bundle
+
+# Code-first PDF generation for C# 
+
+QuestPDF is a production-ready library that lets you design documents the way
+you design software with clean, maintainable C# code. 
+
+[Quick Start](https://www.questpdf.com/quick-start.html)[Features Overview](https://www.questpdf.com/features-overview.html)
+
+HelloWorld.cs
+
+```
+Document
+    .Create(document =>
+    {
+        document.Page(page =>
+        {
+            page.Size(PageSizes.A4);
+            page.Margin(32);
+
+            page.Content()
+                .Text("Hello PDF!")
+                .FontSize(24);
+        });
+    })
+    .GeneratePdfAndShow();```
+
+[14.1KGitHub stars](https://github.com/QuestPDF/QuestPDF)[26MNuGet downloads](https://www.nuget.org/packages/QuestPDF/)
+
+## Experience the Simplicity
+
+See how QuestPDF's Fluent API lets you build professional documents with just a
+few lines of readable, intuitive C# code.
+
+Watch Live Demo ~90 sec
+
+## Everything you need to generate PDFs
+
+From layout and styling to production features, QuestPDF gives you the
+flexibility to create documents of any complexity.
+
+[ Explore all features ](https://www.questpdf.com/features-overview.html)
+
+## Familiar Programming Patterns
+
+Treat documents as application code: strongly-typed models, reusable components,
+and IDE-assisted refactoring. Catch issues early with compile-time feedback.
+
+### Dynamic Content Is Just Code
+
+Use your existing programming language and patterns to ship faster with less
+training. Loops, conditionals, functions are natively supported. Leverage
+IntelliSense, inspections, navigation, and safe refactoring.
+
+### Version Control Friendly
+
+Review document changes like any other code. Get clean diffs, PR approvals, and
+traceable history.
+
+### Ready for AI
+
+A semantic Fluent API helps AI assistants generate layouts, refactor components,
+and troubleshoot issues effectively.
+
+InvoiceDocument.cs
+
+```
+container.Column(column =>
+{
+    column.Item().Text("Order Items").Bold();
+
+    if (Model.ShowSummary)
+        column.Item().Element(ComposeOrderSummary);
+
+    foreach (var item in Model.Items)
+        column.Item().Element(c => ComposeItem(c, item));
+});
+
+void ComposeItem(IContainer container, OrderItem item)
+{
+    container
+        .Border(1, Colors.Grey.Darken2)
+        .Background(item.HighlightColor)
+-       .Padding(12)
++       .Padding(16)
+        .Row(row =>
+        {
+            row.RelativeItem().Text(item.Name);
+            row.AutoItem().Text($"{item.Price:F2} USD");
+        });
+}```
+
+Development Tool
+
+## Companion App
+
+Accelerate development with live document preview and hot-reload capability. See
+your changes instantly without recompiling.
+
+![Companion App](/companion/application-light.webp)
+![Companion App](/companion/application-dark.webp)
+Explore PDF document hierarchy and navigate its structure
+
+Quickly magnify and measure content
+
+Debug runtime exceptions with stack traces and code snippets
+
+Identify, understand and solve layout errors
+
+[Read more](https://www.questpdf.com/companion/features.html)
+
+## Enterprise-grade foundations
+
+A robust layout engine engineered for high performance, complete data privacy,
+and seamless integration into your infrastructure.
+
+### Source-available
+
+Entire QuestPDF source code is available for review and customization, ensuring
+transparency and compliance with your organization's requirements.
+
+### Complete Data Privacy
+
+QuestPDF runs entirely within your infrastructure with no external API calls,
+internet requirement, or background data collection. As a company, we do not
+access, collect, store, or process your private data.
+
+### Comprehensive Layout Engine
+
+A powerful layout engine built specifically for PDF generation. Gain full
+control over document structure, precise content positioning, and automatic
+pagination.
+
+### Advanced Language Support
+
+Create multilingual documents with full RTL language support, advanced text
+shaping, and bi-directional layout handling.
+
+### High Performance
+
+Generate thousands of pages per second while maintaining minimal CPU and memory
+usage. Perfect for high-throughput enterprise applications.
+
+### Optimized File Size
+
+Drastically reduce file sizes without compromising quality. Benefit from
+automatic font subsetting, optimal image compression, and efficient file
+compression.
+
+## Works everywhere you do
+
+Deploy on any major operating system and integrate seamlessly with your favorite
+IDEs, cloud platforms, and development tools.
+
+![Windows](/homepage/supported-platforms/windows.svg)
+Windows
+
+![Linux](/homepage/supported-platforms/linux.svg)
+Linux
+
+![macOS](/homepage/supported-platforms/apple.svg)
+macOS
+
+![Azure](/homepage/supported-platforms/azure.svg)
+Azure
+
+![AWS](/homepage/supported-platforms/aws.svg)
+AWS
+
+![Docker](/homepage/supported-platforms/docker.svg)
+Docker
+
+![Rider](/homepage/supported-platforms/rider.svg)
+Rider
+
+![VS Code](/homepage/supported-platforms/vscode.svg)
+VS Code
+
+![Visual Studio](/homepage/supported-platforms/visual-studio.svg)
+Visual Studio
+
+Compliance
+
+## Industry-standard PDF compliance
+
+Generate PDF documents that meet the strictest archival and accessibility
+requirements. Every build is automatically validated using the open-source [
+veraPDF](https://verapdf.org/) and [Mustang](https://www.mustangproject.org/) 
+tools. 
+
+ArchivalPDF/AISO 19005 standard for long-term document preservation, ensuring
+your PDFs remain readable and visually identical for decades without external
+dependencies.
+
+PDF/A-2bPDF/A-2uPDF/A-2aPDF/A-3bPDF/A-3uPDF/A-3a
+
+AccessibilityPDF/UAISO 14289 standard for universal accessibility with full
+support for screen readers and assistive technologies, ensuring your PDFs are
+usable by people with disabilities.
+
+PDF/UA-1
+
+E-InvoicingEN 16931European standard for electronic invoicing. Embed structured
+invoice data (XML) within PDF documents for automated processing.
+
+ZUGFeRDFactur-X
+
+## Fair and Sustainable License
+
+A model that benefits everyone. Commercial licensing provides businesses with
+legal safety and long-term stability, while funding a feature-complete,
+unrestricted library for the open-source community.
+
+Actively maintained with regular feature, quality, and security updates
+
+Full source code available on GitHub
+
+All features included in every tier without restrictions
+
+Predictable pricing: no per-seat, per-server, or usage fees
+
+Free for individuals, non-profits, all FOSS projects, and organizations under
+$1M in annual revenue. 
+
+[View Pricing](https://www.questpdf.com/pricing.html)[License terms](https://www.questpdf.com/license.html)
+
+Example project
+
+## See a real-world example
+
+Follow our detailed tutorial and see how easy it is to generate a fully
+functional invoice with fewer than 250 lines of C# code.
+
+Step-by-step guidance
+
+Production-ready code
+
+Best practices included
+
+[ Start Tutorial ](https://www.questpdf.com/invoice-tutorial.html)
+
+![Sample invoice page 2](/homepage/getting-started/invoice2.webp)
+![Sample invoice page 1](/homepage/getting-started/invoice1.webp)
+## Documentation
+
+- [Quick start](https://www.questpdf.com/quick-start.html)
+- [Invoice tutorial](https://www.questpdf.com/invoice-tutorial.html)
+- [Features overview](https://www.questpdf.com/features-overview.html)
+- [Companion app](https://www.questpdf.com/companion/usage.html)
+
+## Resources
+
+- [Releases](https://github.com/QuestPDF/QuestPDF/releases)
+- [Roadmap](https://www.questpdf.com/roadmap.html)
+- [GitHub](https://github.com/QuestPDF/QuestPDF)
+- [NuGet](https://www.nuget.org/packages/QuestPDF)
+
+## Licensing & Pricing
+
+- [Pricing](https://www.questpdf.com/pricing.html)
+- [License Selection Guide](https://www.questpdf.com/license/guide.html)
+- [Community License](https://www.questpdf.com/license/community.html)
+- [Professional & Enterprise](https://www.questpdf.com/license/professional-enterprise.html)
+
+## Company & Legal
+
+- [Contact us](https://www.questpdf.com/contact.html)
+- [Customer portal](https://account.questpdf.com/)
+- [Terms of Service](https://www.questpdf.com/terms-of-service.html)
+- [Security Policy](https://www.questpdf.com/security-policy.html)
+- [Privacy Policy](https://www.questpdf.com/privacy-policy.html)
+
+© 2026 QuestPDF by Marcin Ziąbek CodeFlint
+
+
+[End contents for https://www.questpdf.com/]

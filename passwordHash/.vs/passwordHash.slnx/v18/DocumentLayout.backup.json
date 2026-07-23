@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\Employee Management\\passwordHash\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5DA3B145-4837-F3D5-2302-3FD6C893F97D}|passwordHash\\passwordHash.csproj|c:\\projects\\employee management\\passwordhash\\passwordhash\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DA3B145-4837-F3D5-2302-3FD6C893F97D}|passwordHash\\passwordHash.csproj|solutionrelative:passwordhash\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Projects\\Employee Management\\passwordHash\\passwordHash\\Program.cs",
+              "RelativeDocumentMoniker": "passwordHash\\Program.cs",
+              "ToolTip": "C:\\Projects\\Employee Management\\passwordHash\\passwordHash\\Program.cs*",
+              "RelativeToolTip": "passwordHash\\Program.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T08:12:46.673Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

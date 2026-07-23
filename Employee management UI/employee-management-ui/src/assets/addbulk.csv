@@ -1,0 +1,6 @@
+FirstName,LastName,Email,Phone,DepartmentId,Position,Salary,HireDate
+Arjun,Mehta,arjun.mehta@example.com,9876500001,1,HR Specialist,52000,2026-07-23
+Priya,Nair,priya.nair@example.com,9876500002,2,Software Engineer,68000,2026-07-23
+aran,eshmukh,aran.eshmukh@example.com,9876500003,3,Finance Analyst,60000,2026-07-23
+Neha,Rao,neha.rao@example.com,9876500004,4,Marketing Executive,45000,2026-07-23
+Rohan,Kapoor,rohan.kapoor@example.com,9876500005,5,Sales Associate,40000,2026-07-23
