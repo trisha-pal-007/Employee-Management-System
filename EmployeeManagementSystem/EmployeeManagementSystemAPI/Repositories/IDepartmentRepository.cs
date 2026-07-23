@@ -10,6 +10,8 @@ namespace EmployeeManagementSystemAPI.Repositories
         Task<Department> AddAsync(CreateDepartmentDto dto);
         Task<bool> UpdateAsync(UpdateDepartmentDto dto);
         Task<bool> DeleteAsync(int id);
+
+        Task<IEnumerable<DepartmentGrowthDto>> GetDepartmentGrowthAsync();
     }
 
 }

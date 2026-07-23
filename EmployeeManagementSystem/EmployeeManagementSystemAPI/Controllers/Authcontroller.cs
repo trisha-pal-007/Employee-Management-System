@@ -26,6 +26,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User userDto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             if (await _context.Users.AnyAsync(u => u.Username == userDto.Username))
                 return BadRequest("Username already exists.");
 
@@ -47,6 +48,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginDto.Username);
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
                 return Unauthorized("Invalid credentials.");
@@ -82,7 +84,10 @@ namespace EmployeeManagementSystemAPI.Controllers
     // DTO for login
     public class LoginDto
     {
+        [System.ComponentModel.DataAnnotations.Required]
         public string Username { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required]
         public string Password { get; set; } = string.Empty;
     }
 }

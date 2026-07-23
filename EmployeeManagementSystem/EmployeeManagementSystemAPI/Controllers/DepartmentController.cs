@@ -26,6 +26,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateDepartmentDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var created = await _service.AddAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
@@ -34,6 +35,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] UpdateDepartmentDto dto)
         {
             if (id != dto.Id) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var updated = await _service.UpdateAsync(dto);
             return !updated ? NotFound() : NoContent();
         }
@@ -44,6 +46,14 @@ namespace EmployeeManagementSystemAPI.Controllers
             var deleted = await _service.DeleteAsync(id);
             return !deleted ? NotFound() : NoContent();
         }
+
+        [HttpGet("department-growth")]
+        public async Task<IActionResult> GetDepartmentGrowth()
+        {
+            var growth = await _service.GetDepartmentGrowthAsync();
+            return Ok(growth);
+        }
+
     }
 
 }

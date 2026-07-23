@@ -11,6 +11,8 @@ namespace EmployeeManagementSystemAPI.Repositories
         Task<Employee> AddAsync(CreateEmployeeDto dto);
         Task<bool> UpdateAsync(UpdateEmployeeDto dto);
         Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<HiringTrendDto>> GetHiringTrendsAsync();
+        Task<IEnumerable<PerformanceMetricDto>> GetPerformanceMetricsAsync();
 
         // Bulk operations
         Task<IEnumerable<Employee>> BulkAddAsync(List<CreateEmployeeDto> dtos);

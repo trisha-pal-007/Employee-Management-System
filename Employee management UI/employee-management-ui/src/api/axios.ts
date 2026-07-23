@@ -1,9 +1,8 @@
 import axios from "axios";
 
-// Base URL of your ASP.NET backend
-const API_BASE_URL = "http://localhost:44304/api"; // adjust if different
+// Use HTTPS since your backend runs on https://localhost:44304
+const API_BASE_URL = "https://localhost:44304/api";
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -14,7 +13,7 @@ const api = axios.create({
 // Request interceptor → attach JWT
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token"); // or use cookies/context
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -28,7 +27,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid → redirect to login
+      // Token expired or missing → redirect to login
+      localStorage.removeItem("token"); // clear invalid token
       window.location.href = "/login";
     }
     return Promise.reject(error);

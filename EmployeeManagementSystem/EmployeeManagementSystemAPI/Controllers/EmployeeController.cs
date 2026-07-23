@@ -32,6 +32,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var created = await _service.AddAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
@@ -39,6 +40,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         [HttpPost("bulk")]
         public async Task<IActionResult> BulkCreate([FromBody] List<CreateEmployeeDto> employees)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var created = await _service.BulkAddAsync(employees);
             return Ok(created);
         }
@@ -47,6 +49,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] UpdateEmployeeDto dto)
         {
             if (id != dto.Id) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var updated = await _service.UpdateAsync(dto);
             if (!updated) return NotFound();
             return NoContent();
@@ -66,6 +69,22 @@ namespace EmployeeManagementSystemAPI.Controllers
             await _service.BulkDeleteAsync(ids);
             return NoContent();
         }
+
+        [HttpGet("hiring-trends")]
+        public async Task<IActionResult> GetHiringTrends()
+        {
+            var trends = await _service.GetHiringTrendsAsync();
+            return Ok(trends);
+        }
+
+        [HttpGet("performance-report")]
+        public async Task<IActionResult> GetPerformanceReport()
+        {
+            var pdf = await _service.GeneratePerformanceReportPdfAsync();
+            return File(pdf, "application/pdf", "PerformanceReport.pdf");
+        }
+
+
     }
 
 

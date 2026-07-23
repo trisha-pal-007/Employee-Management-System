@@ -30,6 +30,14 @@ namespace EmployeeManagementSystemAPI.Controllers
             var updated = await _service.UpdateStatusAsync(id, status);
             return !updated ? NotFound() : NoContent();
         }
+
+        [HttpGet("attendance-patterns")]
+        public async Task<IActionResult> GetAttendancePatterns()
+        {
+            var patterns = await _service.GetAttendancePatternsAsync();
+            return Ok(patterns);
+        }
+
     }
 
 }

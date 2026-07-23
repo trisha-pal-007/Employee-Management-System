@@ -1,4 +1,5 @@
-﻿using EmployeeManagementSystemAPI.Models;
+﻿using EmployeeManagementSystemAPI.DTOs;
+using EmployeeManagementSystemAPI.Models;
 
 namespace EmployeeManagementSystemAPI.Repositories
 {
@@ -8,6 +9,7 @@ namespace EmployeeManagementSystemAPI.Repositories
         Task<Attendance> CheckOutAsync(int employeeId);
         Task<IEnumerable<Attendance>> GetByEmployeeAsync(int employeeId, DateOnly from, DateOnly to);
         Task<bool> UpdateStatusAsync(int id, string status);
+        Task<IEnumerable<AttendancePatternDto>> GetAttendancePatternsAsync();
     }
 
 }

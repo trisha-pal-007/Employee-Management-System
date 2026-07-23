@@ -12,61 +12,97 @@ namespace EmployeeManagementSystemAPI.Services
     public class ReportService
     {
         private readonly AppDbContext _context;
-        public ReportService(AppDbContext context) => _context = context;
+        private readonly Microsoft.Extensions.Logging.ILogger<ReportService> _logger;
+        public ReportService(AppDbContext context, Microsoft.Extensions.Logging.ILogger<ReportService> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
 
         // Employee Directory
         public byte[] GenerateEmployeeDirectory(string format)
         {
-            var employees = _context.Employees.Include(e => e.Department).ToList();
-            var cleanFormat = format.Trim().ToLower();
-
-            return cleanFormat switch
+            try
             {
-                "pdf" => GenerateEmployeeDirectoryPdf(employees),
-                "excel" => GenerateEmployeeDirectoryExcel(employees),
-                _ => throw new ArgumentException("Unsupported format")
-            };
-        }
+                var employees = _context.Employees.Include(e => e.Department).ToList();
+                var cleanFormat = format.Trim().ToLower();
 
+                return cleanFormat switch
+                {
+                    "pdf" => GenerateEmployeeDirectoryPdf(employees),
+                    "excel" => GenerateEmployeeDirectoryExcel(employees),
+                    _ => throw new ArgumentException("Unsupported format")
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating employee directory report (format={Format})", format);
+                throw new Exception("An error occurred while generating the employee directory report.", ex);
+            }
+        }
 
         // Departments Report
         public byte[] GenerateDepartmentsReport(string format)
         {
-            var departments = _context.Departments.Include(d => d.Employees).ToList();
-            return format.ToLower() switch
+            try
             {
-                "pdf" => GenerateDepartmentsPdf(departments),
-                "excel" => GenerateDepartmentsExcel(departments),
-                _ => throw new ArgumentException("Unsupported format")
-            };
+                var departments = _context.Departments.Include(d => d.Employees).ToList();
+                return format.ToLower() switch
+                {
+                    "pdf" => GenerateDepartmentsPdf(departments),
+                    "excel" => GenerateDepartmentsExcel(departments),
+                    _ => throw new ArgumentException("Unsupported format")
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating departments report (format={Format})", format);
+                throw new Exception("An error occurred while generating the departments report.", ex);
+            }
         }
 
         // Attendance Report
         public byte[] GenerateAttendanceReport(DateOnly from, DateOnly to, string format)
         {
-            var records = _context.Attendance
-                .Include(a => a.Employee)
-                .Where(a => a.Date >= from && a.Date <= to)
-                .ToList();
-
-            return format.ToLower() switch
+            try
             {
-                "pdf" => GenerateAttendancePdf(records),
-                "excel" => GenerateAttendanceExcel(records),
-                _ => throw new ArgumentException("Unsupported format")
-            };
+                var records = _context.Attendance
+                    .Include(a => a.Employee)
+                    .Where(a => a.Date >= from && a.Date <= to)
+                    .ToList();
+
+                return format.ToLower() switch
+                {
+                    "pdf" => GenerateAttendancePdf(records),
+                    "excel" => GenerateAttendanceExcel(records),
+                    _ => throw new ArgumentException("Unsupported format")
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating attendance report from {From} to {To} (format={Format})", from, to, format);
+                throw new Exception("An error occurred while generating the attendance report.", ex);
+            }
         }
 
         // Salary Report
         public byte[] GenerateSalaryReport(string format)
         {
-            var salaries = _context.Salaries.Include(s => s.Employee).ToList();
-            return format.ToLower() switch
+            try
             {
-                "pdf" => GenerateSalaryPdf(salaries),
-                "excel" => GenerateSalaryExcel(salaries),
-                _ => throw new ArgumentException("Unsupported format")
-            };
+                var salaries = _context.Salaries.Include(s => s.Employee).ToList();
+                return format.ToLower() switch
+                {
+                    "pdf" => GenerateSalaryPdf(salaries),
+                    "excel" => GenerateSalaryExcel(salaries),
+                    _ => throw new ArgumentException("Unsupported format")
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating salary report (format={Format})", format);
+                throw new Exception("An error occurred while generating the salary report.", ex);
+            }
         }
 
         // ---------------- PDF Generators ----------------
