@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import Papa from "papaparse";
+import { toast } from "react-hot-toast";
 import DataTable from "../../components/DataTable";
-import EmployeeDetailsModal from "./EmployeeDetailsModal";
+import api from "../../api/axios";
+import { useDepartments } from "../../api/employeeApi";
 
 interface Employee {
   id: number;
@@ -15,7 +17,6 @@ interface Employee {
 }
 
 export default function EmployeesPage() {
-  const token = localStorage.getItem("token");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -25,19 +26,16 @@ export default function EmployeesPage() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
   const [search, setSearch] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["employees"],
     queryFn: async () => {
-      const res = await fetch("https://localhost:44304/api/employee", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to fetch employees");
-      return res.json();
+      const res = await api.get<Employee[]>("/employee");
+      return res.data;
     },
+    retry: false,
   });
+  const { data: departments = [] } = useDepartments();
 
   const handleSort = (key: keyof Employee) => {
     if (sortKey === key) {
@@ -45,40 +43,6 @@ export default function EmployeesPage() {
     } else {
       setSortKey(key);
       setSortOrder("asc");
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this employee?")) return;
-    const res = await fetch(`https://localhost:44304/api/employee/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (res.ok) {
-      alert("Employee deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
-    } else {
-      alert("Failed to delete employee");
-    }
-  };
-
-  const handleBulkDelete = async () => {
-    if (!window.confirm("Delete selected employees?")) return;
-    const res = await fetch("https://localhost:44304/api/Employee/bulk", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(selectedIds),
-    });
-    if (res.ok) {
-      alert("Selected employees deleted!");
-      setSelectedIds([]);
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
-    } else {
-      const errText = await res.text();
-      alert("Bulk delete failed: " + errText);
     }
   };
 
@@ -107,21 +71,12 @@ export default function EmployeesPage() {
             index === self.findIndex((e) => e.email?.toLowerCase() === emp.email?.toLowerCase())
         );
 
-        const res = await fetch("https://localhost:44304/api/Employee/bulk", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(employees),
-        });
-
-        if (res.ok) {
-          alert("Bulk employees created!");
+        try {
+          await api.post("/Employee/bulk", employees);
+          toast.success("Bulk employees created!");
           queryClient.invalidateQueries({ queryKey: ["employees"] });
-        } else {
-          const errText = await res.text();
-          alert("Bulk create failed: " + errText);
+        } catch (error) {
+          toast.error("Bulk create failed. Please try again.");
         }
       },
     });
@@ -163,97 +118,102 @@ export default function EmployeesPage() {
   const paginated = employees.slice((page - 1) * pageSize, page * pageSize);
 
   return (
-    <div>
-      <h2>Employees</h2>
+    <div className="space-y-6">
+      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900">Employees</h2>
+            <p className="mt-2 text-sm text-slate-500">Browse, filter, and manage employee records.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => navigate("/employees/create")}
+              className="rounded-2xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-700"
+            >
+              + Create Employee
+            </button>
+            <label className="inline-flex cursor-pointer items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400">
+              Upload CSV
+              <input type="file" accept=".csv,.xlsx" onChange={handleFileUpload} className="hidden" />
+            </label>
+          </div>
+        </div>
+      </div>
 
-      {/* Bulk Actions */}
-      <div style={{ marginBottom: "10px" }}>
-        <button onClick={() => navigate("/employees/create")}>+ Create Employee</button>
-        <button
-          disabled={selectedIds.length === 0}
-          onClick={handleBulkDelete}
-          style={{ marginLeft: "10px" }}
-        >
-          Bulk Delete
-        </button>
-        <input
-          type="file"
-          accept=".csv,.xlsx"
-          onChange={handleFileUpload}
-          style={{ marginLeft: "10px" }}
+      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="grid gap-4 xl:grid-cols-[1.4fr_0.6fr]">
+          <div className="flex items-center gap-4 rounded-3xl bg-slate-50 p-4">
+            <span className="text-xl text-sky-600">🔎</span>
+            <input
+              type="text"
+              placeholder="Search employees..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            />
+          </div>
+          <div className="flex items-center gap-4 rounded-3xl bg-slate-50 p-4">
+            <span className="text-xl text-teal-600">🏢</span>
+            <select
+              value={departmentFilter}
+              onChange={(e) => setDepartmentFilter(e.target.value)}
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200"
+            >
+              <option value="">All Departments</option>
+              {departments.map((department) => (
+                <option key={department.id} value={String(department.id)}>
+                  {department.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <DataTable<Employee>
+          data={paginated}
+          onRowClick={(row) => navigate(`/employees/${row.id}`)}
+          columns={[
+            {
+              key: "firstName",
+              label: "First Name",
+              render: (row) => (
+                <button
+                  type="button"
+                  onClick={() => navigate(`/employees/${row.id}`)}
+                  className="inline-flex w-full items-center justify-center font-semibold text-sky-700 underline-offset-2 transition hover:underline"
+                >
+                  {row.firstName}
+                </button>
+              ),
+            },
+            {
+              key: "lastName",
+              label: "Last Name",
+              render: (row) => (
+                <button
+                  type="button"
+                  onClick={() => navigate(`/employees/${row.id}`)}
+                  className="inline-flex w-full items-center justify-center font-semibold text-sky-700 underline-offset-2 transition hover:underline"
+                >
+                  {row.lastName}
+                </button>
+              ),
+            },
+            { key: "email", label: "Email" },
+            { key: "position", label: "Position" },
+          ]}
+          page={page}
+          pageSize={pageSize}
+          total={total}
+          onPageChange={setPage}
+          onSort={handleSort}
+          sortKey={sortKey}
+          sortOrder={sortOrder}
         />
       </div>
 
-      {/* Search + Filter */}
-      <div style={{ marginBottom: "10px" }}>
-        <input
-          type="text"
-          placeholder="Search employees..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
-          <option value="">All Departments</option>
-          <option value="1">HR</option>
-          <option value="2">IT</option>
-          <option value="3">Finance</option>
-          <option value="4">Marketing</option>
-          <option value="5">Sales</option>
-        </select>
-      </div>
-
-      <DataTable<Employee>
-        data={paginated}
-        columns={[
-          {
-            key: "id",
-            label: "Select",
-            render: (row) => (
-              <input
-                type="checkbox"
-                checked={selectedIds.includes(row.id)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setSelectedIds([...selectedIds, row.id]);
-                  } else {
-                    setSelectedIds(selectedIds.filter((id) => id !== row.id));
-                  }
-                }}
-              />
-            ),
-          },
-          { key: "firstName", label: "First Name" },
-          { key: "lastName", label: "Last Name" },
-          { key: "email", label: "Email" },
-          { key: "position", label: "Position" },
-          {
-            key: "id",
-            label: "Actions",
-            render: (row) => (
-              <>
-                <button onClick={() => navigate(`/employees/${row.id}/edit`)}>Edit</button>
-                <button onClick={() => handleDelete(row.id)}>Delete</button>
-                <button onClick={() => setSelectedEmployeeId(row.id)}>View</button>
-              </>
-            ),
-          },
-        ]}
-        page={page}
-        pageSize={pageSize}
-        total={total}
-        onPageChange={setPage}
-        onSort={handleSort}
-        sortKey={sortKey}
-        sortOrder={sortOrder}
-      />
-
-      {/* Employee Details Modal */}
-      {selectedEmployeeId && (
-        <EmployeeDetailsModal
-          id={selectedEmployeeId}
-          onClose={() => setSelectedEmployeeId(null)}
-        />
-      )}
     </div>
   );
 }

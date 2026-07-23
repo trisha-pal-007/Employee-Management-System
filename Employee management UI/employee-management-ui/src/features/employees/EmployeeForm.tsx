@@ -1,50 +1,56 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const employeeSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email format"),
+  phone: z.string().min(1, "Phone is required"),
+  departmentId: z.number().min(1, "Department is required"),
+  position: z.string().min(1, "Position is required"),
+  salary: z.number().positive("Salary must be greater than 0"),
+  hireDate: z.string().min(1, "Hire date is required"),
+});
+
+type EmployeeInput = z.infer<typeof employeeSchema>;
 
 interface EmployeeFormProps {
-  initialData?: Employee; // if provided → edit mode
+  initialData?: EmployeeInput & { id?: number };
   onSubmit: (employee: EmployeeInput) => void;
+  submitLabel?: string;
+  isSubmitting?: boolean;
 }
 
-interface Employee {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  departmentId: number;
-  position: string;
-  salary: number;
-  hireDate: string;
-}
-
-interface EmployeeInput {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  departmentId: number;
-  position: string;
-  salary: number;
-  hireDate: string;
-}
-
-export default function EmployeeForm({ initialData, onSubmit }: EmployeeFormProps) {
-  const [form, setForm] = useState<EmployeeInput>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    departmentId: 0,
-    position: "",
-    salary: 0,
-    hireDate: "",
+export default function EmployeeForm({
+  initialData,
+  onSubmit,
+  submitLabel = "Submit",
+  isSubmitting = false,
+}: EmployeeFormProps) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<EmployeeInput>({
+    resolver: zodResolver(employeeSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      departmentId: 0,
+      position: "",
+      salary: 0,
+      hireDate: "",
+    },
   });
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (initialData) {
-      setForm({
+      reset({
         firstName: initialData.firstName,
         lastName: initialData.lastName,
         email: initialData.email,
@@ -55,74 +61,109 @@ export default function EmployeeForm({ initialData, onSubmit }: EmployeeFormProp
         hireDate: initialData.hireDate,
       });
     }
-  }, [initialData]);
-
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!form.firstName) newErrors.firstName = "First name is required";
-    if (!form.lastName) newErrors.lastName = "Last name is required";
-    if (!form.email) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Invalid email format";
-    if (!form.phone) newErrors.phone = "Phone is required";
-    if (!form.departmentId) newErrors.departmentId = "Department is required";
-    if (!form.position) newErrors.position = "Position is required";
-    if (form.salary <= 0) newErrors.salary = "Salary must be greater than 0";
-    if (!form.hireDate) newErrors.hireDate = "Hire date is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: name === "salary" || name === "departmentId" ? Number(value) : value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validate()) {
-      onSubmit(form);
-    }
-  };
+  }, [initialData, reset]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="firstName" placeholder="First Name" value={form.firstName} onChange={handleChange} />
-      {errors.firstName && <span>{errors.firstName}</span>}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium">First Name</label>
+        <input
+          type="text"
+          {...register("firstName")}
+          placeholder="First Name"
+          className="w-full rounded border px-3 py-2"
+        />
+        {errors.firstName && <p className="text-sm text-red-600">{errors.firstName.message}</p>}
+      </div>
 
-      <input name="lastName" placeholder="Last Name" value={form.lastName} onChange={handleChange} />
-      {errors.lastName && <span>{errors.lastName}</span>}
+      <div>
+        <label className="block text-sm font-medium">Last Name</label>
+        <input
+          type="text"
+          {...register("lastName")}
+          placeholder="Last Name"
+          className="w-full rounded border px-3 py-2"
+        />
+        {errors.lastName && <p className="text-sm text-red-600">{errors.lastName.message}</p>}
+      </div>
 
-      <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-      {errors.email && <span>{errors.email}</span>}
+      <div>
+        <label className="block text-sm font-medium">Email</label>
+        <input
+          type="email"
+          {...register("email")}
+          placeholder="Email"
+          className="w-full rounded border px-3 py-2"
+        />
+        {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
+      </div>
 
-      <input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />
-      {errors.phone && <span>{errors.phone}</span>}
+      <div>
+        <label className="block text-sm font-medium">Phone</label>
+        <input
+          type="text"
+          {...register("phone")}
+          placeholder="Phone"
+          className="w-full rounded border px-3 py-2"
+        />
+        {errors.phone && <p className="text-sm text-red-600">{errors.phone.message}</p>}
+      </div>
 
-      <select name="departmentId" value={form.departmentId} onChange={handleChange}>
-        <option value={0}>Select Department</option>
-        <option value={1}>HR</option>
-        <option value={2}>IT</option>
-        <option value={3}>Finance</option>
-        <option value={4}>Marketing</option>
-        <option value={5}>Sales</option>
-      </select>
-      {errors.departmentId && <span>{errors.departmentId}</span>}
+      <div>
+        <label className="block text-sm font-medium">Department</label>
+        <select
+          {...register("departmentId", { valueAsNumber: true })}
+          className="w-full rounded border px-3 py-2"
+        >
+          <option value={0}>Select Department</option>
+          <option value={1}>HR</option>
+          <option value={2}>IT</option>
+          <option value={3}>Finance</option>
+          <option value={4}>Marketing</option>
+          <option value={5}>Sales</option>
+        </select>
+        {errors.departmentId && <p className="text-sm text-red-600">{errors.departmentId.message}</p>}
+      </div>
 
-      <input name="position" placeholder="Position" value={form.position} onChange={handleChange} />
-      {errors.position && <span>{errors.position}</span>}
+      <div>
+        <label className="block text-sm font-medium">Position</label>
+        <input
+          type="text"
+          {...register("position")}
+          placeholder="Position"
+          className="w-full rounded border px-3 py-2"
+        />
+        {errors.position && <p className="text-sm text-red-600">{errors.position.message}</p>}
+      </div>
 
-      <input type="number" name="salary" placeholder="Salary" value={form.salary} onChange={handleChange} />
-      {errors.salary && <span>{errors.salary}</span>}
+      <div>
+        <label className="block text-sm font-medium">Salary</label>
+        <input
+          type="number"
+          {...register("salary", { valueAsNumber: true })}
+          placeholder="Salary"
+          className="w-full rounded border px-3 py-2"
+        />
+        {errors.salary && <p className="text-sm text-red-600">{errors.salary.message}</p>}
+      </div>
 
-      <input type="date" name="hireDate" value={form.hireDate} onChange={handleChange} />
-      {errors.hireDate && <span>{errors.hireDate}</span>}
+      <div>
+        <label className="block text-sm font-medium">Hire Date</label>
+        <input
+          type="date"
+          {...register("hireDate")}
+          className="w-full rounded border px-3 py-2"
+        />
+        {errors.hireDate && <p className="text-sm text-red-600">{errors.hireDate.message}</p>}
+      </div>
 
-      <button type="submit">{initialData ? "Update Employee" : "Create Employee"}</button>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
+      >
+        {isSubmitting ? "Saving..." : submitLabel}
+      </button>
     </form>
   );
 }

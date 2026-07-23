@@ -54,6 +54,11 @@ export interface DepartmentGrowth {
   count: number;
 }
 
+export interface DepartmentOption {
+  id: number;
+  name: string;
+}
+
 export const useDepartmentGrowth = () => {
   return useQuery<DepartmentGrowth[]>({
     queryKey: ["department-growth"],
@@ -71,6 +76,28 @@ export const useEmployees = () => {
       const res = await api.get("/employee");
       return res.data;
     }
+  });
+};
+
+export const useDepartments = () => {
+  return useQuery<DepartmentOption[]>({
+    queryKey: ["departments"],
+    queryFn: async () => {
+      const res = await api.get("/department");
+      const raw = Array.isArray(res.data) ? res.data : [];
+
+      return raw.map((item: any, index: number) => {
+        if (typeof item === "string") {
+          return { id: index + 1, name: item };
+        }
+
+        return {
+          id: Number(item.id ?? index + 1),
+          name: String(item.name ?? item.departmentName ?? item.department ?? "Unknown"),
+        };
+      });
+    },
+    retry: false,
   });
 };
 

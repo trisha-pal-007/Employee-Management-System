@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import api from "../../api/axios";
+import { toast } from "react-hot-toast";
 
 interface AttendanceSummary {
   totalDays: number;
@@ -12,27 +14,34 @@ interface EmployeeDetails {
   lastName: string;
   email: string;
   phone: string;
-  departmentName?: string; // ✅ optional in case backend doesn't return
+  departmentName?: string;
   position: string;
   salary: number;
   hireDate: string;
-  attendanceSummary?: AttendanceSummary; // ✅ optional
+  attendanceSummary?: AttendanceSummary;
 }
 
 export default function EmployeeDetailsModal({ id, onClose }: { id: number; onClose: () => void }) {
   const [employee, setEmployee] = useState<EmployeeDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    fetch(`https://localhost:44304/api/Employee/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then(setEmployee)
-      .catch(() => setEmployee(null));
+    void (async () => {
+      try {
+        setIsLoading(true);
+        const res = await api.get<EmployeeDetails>(`/Employee/${id}`);
+        setEmployee(res.data);
+      } catch (error) {
+        toast.error("Failed to load employee details.");
+        setEmployee(null);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, [id]);
 
-  if (!employee) return <div className="modal">Loading...</div>;
+  if (isLoading) return <div className="modal">Loading...</div>;
+  if (!employee) return <div className="modal">Employee details not available.</div>;
 
   return (
     <div className="modal">
