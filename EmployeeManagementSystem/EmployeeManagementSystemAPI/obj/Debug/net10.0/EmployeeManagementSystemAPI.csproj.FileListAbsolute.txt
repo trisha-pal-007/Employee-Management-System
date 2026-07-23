@@ -361,3 +361,4 @@ C:\Projects\Employee Management\EmployeeManagementSystem\EmployeeManagementSyste
 C:\Projects\Employee Management\EmployeeManagementSystem\EmployeeManagementSystemAPI\obj\Debug\net10.0\EmployeeManagementSystemAPI.genruntimeconfig.cache
 C:\Projects\Employee Management\EmployeeManagementSystem\EmployeeManagementSystemAPI\obj\Debug\net10.0\ref\EmployeeManagementSystemAPI.dll
 C:\Projects\Employee Management\EmployeeManagementSystem\EmployeeManagementSystemAPI\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
+C:\Projects\Employee Management\EmployeeManagementSystem\EmployeeManagementSystemAPI\obj\Debug\net10.0\EmployeeManagementSystemAPI.sourcelink.json

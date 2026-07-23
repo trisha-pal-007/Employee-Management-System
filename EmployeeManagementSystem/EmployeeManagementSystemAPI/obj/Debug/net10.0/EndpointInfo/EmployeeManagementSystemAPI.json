@@ -132,6 +132,18 @@
         }
       }
     },
+    "/api/Attendance/attendance-patterns": {
+      "get": {
+        "tags": [
+          "Attendance"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Auth/register": {
       "post": {
         "tags": [
@@ -311,6 +323,18 @@
               "format": "int32"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Department/department-growth": {
+      "get": {
+        "tags": [
+          "Department"
         ],
         "responses": {
           "200": {
@@ -541,6 +565,30 @@
         }
       }
     },
+    "/api/Employee/hiring-trends": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Employee/performance-report": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Reports/employee-directory": {
       "get": {
         "tags": [
@@ -688,11 +736,14 @@
   "components": {
     "schemas": {
       "CreateDepartmentDto": {
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "description": {
             "type": "string",
@@ -702,33 +753,47 @@
         "additionalProperties": false
       },
       "CreateEmployeeDto": {
+        "required": [
+          "departmentId",
+          "email",
+          "firstName",
+          "hireDate",
+          "lastName",
+          "position"
+        ],
         "type": "object",
         "properties": {
           "firstName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "email": {
+            "minLength": 1,
             "type": "string",
-            "nullable": true
+            "format": "email"
           },
           "phone": {
             "type": "string",
+            "format": "tel",
             "nullable": true
           },
           "departmentId": {
+            "maximum": 2147483647,
+            "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "position": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "salary": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 0,
             "type": "number",
             "format": "double"
           },
@@ -740,29 +805,39 @@
         "additionalProperties": false
       },
       "LoginDto": {
+        "required": [
+          "password",
+          "username"
+        ],
         "type": "object",
         "properties": {
           "username": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "password": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
       },
       "UpdateDepartmentDto": {
+        "required": [
+          "id",
+          "name"
+        ],
         "type": "object",
         "properties": {
           "id": {
+            "maximum": 2147483647,
+            "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "description": {
             "type": "string",
@@ -772,33 +847,48 @@
         "additionalProperties": false
       },
       "UpdateEmployeeDto": {
+        "required": [
+          "departmentId",
+          "email",
+          "firstName",
+          "hireDate",
+          "id",
+          "lastName",
+          "position"
+        ],
         "type": "object",
         "properties": {
           "firstName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "email": {
+            "minLength": 1,
             "type": "string",
-            "nullable": true
+            "format": "email"
           },
           "phone": {
             "type": "string",
+            "format": "tel",
             "nullable": true
           },
           "departmentId": {
+            "maximum": 2147483647,
+            "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "position": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "salary": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 0,
             "type": "number",
             "format": "double"
           },
@@ -807,6 +897,8 @@
             "format": "date-time"
           },
           "id": {
+            "maximum": 2147483647,
+            "minimum": 1,
             "type": "integer",
             "format": "int32"
           }
@@ -814,6 +906,11 @@
         "additionalProperties": false
       },
       "User": {
+        "required": [
+          "email",
+          "passwordHash",
+          "username"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -821,16 +918,17 @@
             "format": "int32"
           },
           "username": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "email": {
+            "minLength": 1,
             "type": "string",
-            "nullable": true
+            "format": "email"
           },
           "passwordHash": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "role": {
             "type": "string",

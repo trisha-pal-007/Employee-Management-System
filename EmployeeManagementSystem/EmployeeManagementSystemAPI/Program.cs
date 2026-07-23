@@ -5,15 +5,25 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using QuestPDF.Infrastructure;
+using EmployeeManagementSystemAPI.Middleware;
+using EmployeeManagementSystemAPI.Filters;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// configure logging providers
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 // Configure QuestPDF license once at startup
 QuestPDF.Settings.License = LicenseType.Community;
 
 // Add services to the container.
-builder.Services.AddControllers()
+builder.Services.AddControllers(options =>
+    {
+        // global model validation filter
+        options.Filters.Add<ValidationFilter>();
+    })
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler =
@@ -72,6 +82,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Global exception handling middleware must be registered early in the pipeline
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

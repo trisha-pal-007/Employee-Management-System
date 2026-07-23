@@ -22,6 +22,16 @@
   },
   {
     "ContainingType": "EmployeeManagementSystemAPI.Controllers.AttendanceController",
+    "Method": "GetAttendancePatterns",
+    "RelativePath": "api/Attendance/attendance-patterns",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeManagementSystemAPI.Controllers.AttendanceController",
     "Method": "CheckIn",
     "RelativePath": "api/Attendance/checkin/{employeeId}",
     "HttpMethod": "POST",
@@ -190,6 +200,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "EmployeeManagementSystemAPI.Controllers.DepartmentController",
+    "Method": "GetDepartmentGrowth",
+    "RelativePath": "api/Department/department-growth",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "EmployeeManagementSystemAPI.Controllers.EmployeeController",
     "Method": "GetAll",
     "RelativePath": "api/Employee",
@@ -309,6 +329,26 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeManagementSystemAPI.Controllers.EmployeeController",
+    "Method": "GetHiringTrends",
+    "RelativePath": "api/Employee/hiring-trends",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeManagementSystemAPI.Controllers.EmployeeController",
+    "Method": "GetPerformanceReport",
+    "RelativePath": "api/Employee/performance-report",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
