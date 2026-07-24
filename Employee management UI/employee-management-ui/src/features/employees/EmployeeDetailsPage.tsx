@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { type AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 import api from "../../api/axios";
+import { useDepartments } from "../../api/employeeApi";
 
 interface EmployeeDetails {
   id: number;
@@ -11,7 +12,9 @@ interface EmployeeDetails {
   lastName: string;
   email: string;
   phone: string;
+  departmentId?: number;
   departmentName?: string;
+  department?: string;
   position: string;
   salary: number;
   hireDate: string;
@@ -23,12 +26,19 @@ export default function EmployeeDetailsPage() {
   const queryClient = useQueryClient();
   const [employee, setEmployee] = useState<EmployeeDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { data: departments = [] } = useDepartments();
 
   const formatDate = (value?: string) => {
     if (!value) return "N/A";
     const date = new Date(value);
     return Number.isNaN(date.getTime()) ? "N/A" : date.toLocaleDateString();
   };
+
+  const departmentName =
+    employee?.departmentName ??
+    employee?.department ??
+    departments.find((department) => department.id === employee?.departmentId)?.name ??
+    "N/A";
 
   useEffect(() => {
     void (async () => {
@@ -111,7 +121,7 @@ export default function EmployeeDetailsPage() {
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl bg-slate-50 p-4">
               <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Department</p>
-              <p className="mt-2 text-base font-semibold text-slate-900">{employee.departmentName ?? "N/A"}</p>
+              <p className="mt-2 text-base font-semibold text-slate-900">{departmentName}</p>
             </div>
             <div className="rounded-2xl bg-sky-50 p-4">
               <p className="text-xs uppercase tracking-[0.3em] text-sky-700">Position</p>
@@ -133,7 +143,7 @@ export default function EmployeeDetailsPage() {
           <div className="mt-5 space-y-3 text-sm text-slate-700">
             <p><span className="font-semibold">Email:</span> {employee.email}</p>
             <p><span className="font-semibold">Phone:</span> {employee.phone}</p>
-            <p><span className="font-semibold">Department:</span> {employee.departmentName ?? "N/A"}</p>
+            <p><span className="font-semibold">Department:</span> {departmentName}</p>
             <p><span className="font-semibold">Employee ID:</span> {employee.id}</p>
           </div>
         </div>

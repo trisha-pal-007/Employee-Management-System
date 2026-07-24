@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import { toast } from "react-hot-toast";
+import { useDepartments } from "../../api/employeeApi";
 
 interface AttendanceSummary {
   totalDays: number;
@@ -14,7 +15,9 @@ interface EmployeeDetails {
   lastName: string;
   email: string;
   phone: string;
+  departmentId?: number;
   departmentName?: string;
+  department?: string;
   position: string;
   salary: number;
   hireDate: string;
@@ -24,6 +27,7 @@ interface EmployeeDetails {
 export default function EmployeeDetailsModal({ id, onClose }: { id: number; onClose: () => void }) {
   const [employee, setEmployee] = useState<EmployeeDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { data: departments = [] } = useDepartments();
 
   useEffect(() => {
     void (async () => {
@@ -40,6 +44,12 @@ export default function EmployeeDetailsModal({ id, onClose }: { id: number; onCl
     })();
   }, [id]);
 
+  const departmentName =
+    employee?.departmentName ??
+    employee?.department ??
+    departments.find((department) => department.id === employee?.departmentId)?.name ??
+    "N/A";
+
   if (isLoading) return <div className="modal">Loading...</div>;
   if (!employee) return <div className="modal">Employee details not available.</div>;
 
@@ -49,7 +59,7 @@ export default function EmployeeDetailsModal({ id, onClose }: { id: number; onCl
         <h3>{employee.firstName} {employee.lastName}</h3>
         <p><strong>Email:</strong> {employee.email}</p>
         <p><strong>Phone:</strong> {employee.phone}</p>
-        <p><strong>Department:</strong> {employee.departmentName ?? "N/A"}</p>
+        <p><strong>Department:</strong> {departmentName}</p>
         <p><strong>Position:</strong> {employee.position}</p>
         <p><strong>Salary:</strong> ₹{employee.salary}</p>
         <p><strong>Hire Date:</strong> {new Date(employee.hireDate).toLocaleDateString()}</p>

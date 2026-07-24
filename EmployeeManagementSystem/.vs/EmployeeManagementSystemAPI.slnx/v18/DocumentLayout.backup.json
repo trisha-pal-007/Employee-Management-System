@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Projects\\Employee Management\\EmployeeManagementSystem\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|c:\\projects\\employee management\\employeemanagementsystem\\employeemanagementsystemapi\\controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|solutionrelative:employeemanagementsystemapi\\controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|c:\\projects\\employee management\\employeemanagementsystem\\employeemanagementsystemapi\\controllers\\departmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|solutionrelative:employeemanagementsystemapi\\controllers\\departmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|c:\\projects\\employee management\\employeemanagementsystem\\employeemanagementsystemapi\\controllers\\attendancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|solutionrelative:employeemanagementsystemapi\\controllers\\attendancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|c:\\projects\\employee management\\employeemanagementsystem\\employeemanagementsystemapi\\controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|solutionrelative:employeemanagementsystemapi\\controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F83DA4DD-9C20-2B05-9C20-E6626CAC01AF}|EmployeeManagementSystemAPI\\EmployeeManagementSystemAPI.csproj|c:\\projects\\employee management\\employeemanagementsystem\\employeemanagementsystemapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -26,11 +26,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "AttendanceController.cs",
               "DocumentMoniker": "C:\\Projects\\Employee Management\\EmployeeManagementSystem\\EmployeeManagementSystemAPI\\Controllers\\AttendanceController.cs",
               "RelativeDocumentMoniker": "EmployeeManagementSystemAPI\\Controllers\\AttendanceController.cs",
@@ -42,7 +42,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "DepartmentController.cs",
               "DocumentMoniker": "C:\\Projects\\Employee Management\\EmployeeManagementSystem\\EmployeeManagementSystemAPI\\Controllers\\DepartmentController.cs",
               "RelativeDocumentMoniker": "EmployeeManagementSystemAPI\\Controllers\\DepartmentController.cs",
@@ -55,15 +55,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "EmployeeController.cs",
               "DocumentMoniker": "C:\\Projects\\Employee Management\\EmployeeManagementSystem\\EmployeeManagementSystemAPI\\Controllers\\EmployeeController.cs",
               "RelativeDocumentMoniker": "EmployeeManagementSystemAPI\\Controllers\\EmployeeController.cs",
               "ToolTip": "C:\\Projects\\Employee Management\\EmployeeManagementSystem\\EmployeeManagementSystemAPI\\Controllers\\EmployeeController.cs",
               "RelativeToolTip": "EmployeeManagementSystemAPI\\Controllers\\EmployeeController.cs",
-              "ViewState": "AgIAAEMAAAAAAAAAAADwv0gAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwB0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-23T13:19:00.23Z"
+              "WhenOpened": "2026-07-23T13:19:00.23Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

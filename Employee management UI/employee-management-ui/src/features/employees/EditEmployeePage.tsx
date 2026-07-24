@@ -23,7 +23,13 @@ export default function EditEmployeePage() {
   const handleSubmit = async (employee: any) => {
     try {
       setIsSaving(true);
+
+      const normalizedHireDate = typeof employee.hireDate === "string"
+        ? employee.hireDate.slice(0, 10)
+        : new Date(employee.hireDate).toISOString().slice(0, 10);
+
       const payload = {
+        id: Number(id),
         firstName: employee.firstName,
         lastName: employee.lastName,
         email: employee.email,
@@ -31,7 +37,7 @@ export default function EditEmployeePage() {
         departmentId: Number(employee.departmentId),
         position: employee.position,
         salary: Number(employee.salary),
-        hireDate: new Date(employee.hireDate).toISOString(),
+        hireDate: normalizedHireDate,
       };
 
       await api.put(`/employee/${id}`, payload);
